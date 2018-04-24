@@ -1,6 +1,17 @@
 import java.awt.Dimension;
 import javax.swing.JFrame;
 
+/**
+ * Creates a new JFrame for the MineWalker Game. Game is played by starting in the lower left
+ * corner of a grid and trying to get to the upper right without losing all lives, score is kept
+ * by adding 100 each time a valid space is clicked, 100 points are subtracted when a mine is stepped
+ * on and the player loses a life. Reaching the final spot adds 300 points to the player's score.
+ * 
+ * Get the highest score you can!
+ * 
+ * @author Zach Luciano
+ *
+ */
 public class MineWalker{
 
 	public static void main(String[] args) {
