@@ -15,6 +15,7 @@ public class MineFieldButton extends JButton {
 	private boolean onPath;
 	private boolean isCurrentPosition;
 	private boolean isStartOrEnd;
+	private boolean alreadyClicked;
 	public int x = 0;
 	public int y = 0;
 
@@ -27,7 +28,20 @@ public class MineFieldButton extends JButton {
 		onPath = false;
 		isCurrentPosition = false;
 		isStartOrEnd = false;
+		alreadyClicked = false;
 		
+	}
+	
+	/**
+	 * Checks to see if the button has been already clicked
+	 * @return alreadyClicked - boolean set to true when button is clicked
+	 */
+	public boolean wasAlreadyClicked() {
+		return alreadyClicked;
+	}
+	
+	public void setClicked() {
+		alreadyClicked = true;
 	}
 	
 	/**

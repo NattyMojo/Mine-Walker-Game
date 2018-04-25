@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -11,12 +12,12 @@ import java.util.Random;
 
 import javax.swing.Timer;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 /**
  * Main game GUI. All elements are added to this panel which is added to the JFrame of MineWalker.java
@@ -64,7 +65,7 @@ public class MineWalkerPanel extends JPanel {
 		setLayout(new BorderLayout());
 
 		east.setPreferredSize(new Dimension(150, height));
-		east.setLayout(new BoxLayout(east, BoxLayout.Y_AXIS));
+		east.setLayout(new GridLayout(2,1));
 		east.setBackground(Color.LIGHT_GRAY);
 		fillEastPanel();
 
@@ -107,6 +108,9 @@ public class MineWalkerPanel extends JPanel {
 		newOrGiveUp.addActionListener(new NewOrGiveUpListener());
 		newOrGiveUp.setPreferredSize(new Dimension(120, 30));
 		south.add(newOrGiveUp);
+		
+		JLabel gridSizeLabel = new JLabel("Grid Size:");
+		south.add(gridSizeLabel);
 
 		JTextField gridSizeField = new JTextField();
 		gridSizeField.setPreferredSize(new Dimension(40, 30));
@@ -123,9 +127,15 @@ public class MineWalkerPanel extends JPanel {
 		east.setBorder(BorderFactory.createTitledBorder("Score Board"));
 
 		JLabel lives = new JLabel("Lives: " + livesLeft);
+		lives.setVerticalAlignment(SwingConstants.BOTTOM);
+		lives.setHorizontalAlignment(SwingConstants.CENTER);
+		lives.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
 		east.add(lives);
 
 		JLabel score = new JLabel("Score: " + playerScore);
+		score.setVerticalAlignment(SwingConstants.TOP);
+		score.setHorizontalAlignment(SwingConstants.CENTER);
+		score.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
 		east.add(score);
 
 	}
@@ -140,27 +150,37 @@ public class MineWalkerPanel extends JPanel {
 		JLabel green = new JLabel("0 Nearby Mines");
 		green.setBackground(Color.GREEN);
 		green.setOpaque(true);
+		green.setHorizontalAlignment(SwingConstants.CENTER);
+		green.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
 		west.add(green);
 
 		JLabel yellow = new JLabel("1 Nearby Mine");
 		yellow.setBackground(Color.YELLOW);
 		yellow.setOpaque(true);
+		yellow.setHorizontalAlignment(SwingConstants.CENTER);
+		yellow.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
 		west.add(yellow);
 
 		JLabel orange = new JLabel("2 Nearby Mines");
 		orange.setBackground(Color.ORANGE);
 		orange.setOpaque(true);
+		orange.setHorizontalAlignment(SwingConstants.CENTER);
+		orange.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
 		west.add(orange);
 
 		JLabel red = new JLabel("3 Nearby Mines");
 		red.setBackground(Color.RED);
 		red.setOpaque(true);
+		red.setHorizontalAlignment(SwingConstants.CENTER);
+		red.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
 		west.add(red);
 
 		JLabel black = new JLabel("Exploded Mine");
 		black.setBackground(Color.BLACK);
 		black.setForeground(Color.WHITE);
 		black.setOpaque(true);
+		black.setHorizontalAlignment(SwingConstants.CENTER);
+		black.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
 		west.add(black);
 
 		JLabel emptyCell = new JLabel();
@@ -170,11 +190,15 @@ public class MineWalkerPanel extends JPanel {
 		JLabel start = new JLabel("Start");
 		start.setBackground(Color.CYAN);
 		start.setOpaque(true);
+		start.setHorizontalAlignment(SwingConstants.CENTER);
+		start.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
 		west.add(start);
 
 		JLabel finish = new JLabel("Finish");
 		finish.setBackground(Color.MAGENTA);
 		finish.setOpaque(true);
+		finish.setHorizontalAlignment(SwingConstants.CENTER);
+		finish.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
 		west.add(finish);
 
 	}
@@ -198,18 +222,24 @@ public class MineWalkerPanel extends JPanel {
 			if((mb.x == previouslyClicked.x+1 || mb.x == previouslyClicked.x - 1) && mb.y == previouslyClicked.y) {
 				mb.setBackground(Color.PINK);
 				mb.setCurrentPosition();
+				if(mb.wasAlreadyClicked() == false) {
+					playerScore += 100;
+				}
+				mb.setClicked();
 				previouslyClicked.setCurrentPosition();
 				previouslyClicked = mb;
-				playerScore += 100;
 			}
 			else if((mb.y == previouslyClicked.y+1 || mb.y == previouslyClicked.y - 1) && mb.x == previouslyClicked.x) {
 				mb.setBackground(Color.PINK);
 				mb.setCurrentPosition();
+				if(mb.wasAlreadyClicked() == false) {
+					playerScore += 100;
+				}
+				mb.setClicked();
 				previouslyClicked.setCurrentPosition();
 				previouslyClicked = mb;
-				playerScore += 100;
 			}
-			System.out.println(playerScore);
+			System.out.println(playerScore); //remove before submitting
 			
 			for (int row = 0; row < gridSize; row++) {
 				for (int column = 0; column < gridSize; column++) {
@@ -238,7 +268,7 @@ public class MineWalkerPanel extends JPanel {
 					
 					if(previouslyClicked.equals(mfp.buttons[row][column]) && mfp.buttons[row][column].isMine()) {
 						livesLeft--;
-						playerScore -= 200;
+						playerScore -= 300;
 						mfp.buttons[row][column].setMine();
 						mineClicked = mfp.buttons[row][column];
 						mineWasClicked = true;
@@ -252,7 +282,13 @@ public class MineWalkerPanel extends JPanel {
 								System.exit(0);
 							}
 						}
-					}		
+					}
+					main.remove(east);
+					east.removeAll();
+					fillEastPanel();
+					main.add(east, BorderLayout.EAST);
+					main.invalidate();
+					main.revalidate();
 				}
 			}
 		}
